@@ -16,23 +16,104 @@
  */
 
 / {
+    macros {
+        // Control + C, F, V --> select, press, profit!
+        findcpy: findcpy {
+            label = "Copy-Find-Paste";
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings
+                = <&macro_tap &kp LC(C)>
+                , <&macro_wait_time 100>
+                , <&macro_tap &kp LC(F)>
+                , <&macro_wait_time 100>
+                , <&macro_tap &kp LC(V)>
+                ;
+        };
+    };
+
     keymap {
         compatible = "zmk,keymap";
 
+/*
+ * Base Layer: QWERTY
+ *
+ * ,-------------------------------------------.                              ,-------------------------------------------.
+ * |  Tab   |   Q  |   W  |   E  |   R  |   T  |                              |   Y  |   U  |   I  |   O  |   P  |  Bksp  |
+ * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
+ * |FKys/Esc|   A  |   S  |   D  |   F  |   G  |                              |   H  |   J  |   K  |   L  | ;  : |  ' "   |
+ * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
+ * | LShift |   Z  |   X  |   C  |   V  |   B  |                              |   N  |   M  | ,  < | . >  | /  ? |  Del   |
+ * `----------------------+------+------+------+-------------.  .-------------+------+------+------+----------------------'
+ *                        |Quick-|  Alt | Ctrl | Space|      |  |      | Shft | GUI  |      | Mute |
+ *                        |S  ENC|      |      |      | Sym  |  | Nav  |      |      |      | +ENC |
+ *                        `----------------------------------'  `----------------------------------'
+ */
         default_layer {
-            // ---------------------------------------------------------------------------------------------------------------------------------
-            // |  ESC  |  Q  |  W  |  E   |  R   |  T   |                                          |  Y   |  U    |  I    |  O   |   P   |   \  |
-            // |  TAB  |  A  |  S  |  D   |  F   |  G   |                                          |  H   |  J    |  K    |  L   |   ;   |   '  |
-            // | SHIFT |  Z  |  X  |  C   |  V   |  B   | L SHIFT | L SHIFT |  | L SHIFT | L SHIFT |  N   |  M    |  ,    |  .   |   /   | CTRL |
-            //                     | GUI  | DEL  | RET  |  SPACE  |   ESC   |  |   RET   |  SPACE  | TAB  | BSPC  | R-ALT |
             bindings = <
-            &kp ESC   &kp Q &kp W &kp E &kp R &kp T                                                &kp Y &kp U  &kp I     &kp O   &kp P    &kp BSLH
-            &kp TAB   &kp A &kp S &kp D &kp F &kp G                                                &kp H &kp J  &kp K     &kp L   &kp SEMI &kp SQT
-            &kp LSHFT &kp Z &kp X &kp C &kp V &kp B &kp LSHFT &kp LSHFT        &kp LSHFT &kp LSHFT &kp N &kp M  &kp COMMA &kp DOT &kp FSLH &kp RCTRL
-            &kp LGUI &kp DEL &kp RET &kp SPACE &kp ESC        &kp RET  &kp SPACE  &kp TAB &kp BSPC &kp RALT
+        // ╭───────────┬───────────┬───────────┬───────────┬───────────┬───────────╮                                                       ╭───────────┬───────────┬───────────┬───────────┬───────────┬───────────╮
+            &kp TAB     &kp Q       &kp W       &kp E       &kp R       &kp T                                                               &kp Y       &kp U       &kp I       &kp O       &kp P       &kp BACKSPACE
+        // ├───────────┼───────────┼───────────┼───────────┼───────────┼───────────┤                                                       ├───────────┼───────────┼───────────┼───────────┼───────────┼───────────┤
+            //&lt func ESC &kp A      &kp S       &kp D       &kp F       &kp G                                                               &kp H       &kp J       &kp K       &kp L       &kp SEMI    &kp SINGLE_QUOTE
+            &kp ESC     &kp A      &kp S       &kp D       &kp F       &kp G                                                               &kp H       &kp J       &kp K       &kp L       &kp SEMI    &kp SINGLE_QUOTE
+        // ├───────────┼───────────┼───────────┼───────────┼───────────┼───────────┼───────────┬───────────╮       ╭───────────┬───────────┼───────────┼───────────┼───────────┼───────────┼───────────┼───────────┤
+            &kp LSHIFT  &kp Z       &kp X       &kp C       &kp V       &kp B       &trans       &findcpy           &kp C_MUTE  &trans      &kp N       &kp M       &kp COMMA   &kp DOT     &kp SLASH   &kp DELETE
+        // ╰───────────┴───────────┴───────────┼───────────┼───────────┼───────────┼───────────┼───────────┤       ├───────────┼───────────┼───────────┼───────────┼───────────┼───────────┴───────────┴───────────╯
+                                                //&trans      &kp LALT    &kp LCTRL   &kp SPACE   &mo sym             &mo nav     &kp RSHIFT  &kp LGUI    &trans      &trans
+                                                &trans      &kp LALT    &kp LCTRL   &kp SPACE   &kp Y               &kp A       &kp RSHIFT  &kp LGUI    &trans      &trans
+        //                                     ╰───────────┴───────────┴───────────┴───────────┴───────────╯       ╰───────────┴───────────┴───────────┴───────────┴───────────╯
             >;
 
-            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN &inc_dec_kp PG_UP PG_DN>;
+            // Left: F3 / Shift F3, Right: Volume up / down
+            sensor-bindings = <&inc_dec_kp F3 LS(F3) &inc_dec_kp C_VOL_UP C_VOL_DN>;
         };
+
+
+
+
+        // ╭───────────┬───────────┬───────────┬───────────┬───────────┬───────────╮                                                       ╭───────────┬───────────┬───────────┬───────────┬───────────┬───────────╮
+        // ├───────────┼───────────┼───────────┼───────────┼───────────┼───────────┤                                                       ├───────────┼───────────┼───────────┼───────────┼───────────┼───────────┤
+        // ├───────────┼───────────┼───────────┼───────────┼───────────┼───────────┼───────────┬───────────╮       ╭───────────┬───────────┼───────────┼───────────┼───────────┼───────────┼───────────┼───────────┤
+        // ╰───────────┴───────────┴───────────┼───────────┼───────────┼───────────┼───────────┼───────────┤       ├───────────┼───────────┼───────────┼───────────┼───────────┼───────────┴───────────┴───────────╯
+        //                                     ╰───────────┴───────────┴───────────┴───────────┴───────────╯       ╰───────────┴───────────┴───────────┴───────────┴───────────╯
+
+
+
+
+        //sym {};
+        //nav {};
+        //func {};
+        //nump {};
     };
 };
+
+
+
+
+/* From converter:
+  layer0 {
+          bindings = <
+          &kp TAB &kp Q &kp W &kp E &kp R &kp T &kp Y &kp U &kp I &kp O &kp P &kp BACKSPACE &lt _FUNCTION  KC_ESC &kp A &kp S &kp D &kp F &kp G &kp H &kp J &kp K &kp L &kp SEMICOLON &kp SINGLE_QUOTE &kp LEFT_SHIFT &kp Z &kp X &kp C &kp V &kp B &trans &trans &trans &trans &kp N &kp M &kp COMMA &kp DOT &kp SLASH &kp DELETE FINDCPY &kp LEFT_ALT &kp LEFT_CONTROL &kp SPACE &mo _SYM &mo _NAV &kp RIGHT_SHIFT &kp LEFT_GUI &trans &kp C_MUTE
+          >;
+        }
+    ;layer1 {
+          bindings = <
+          &kp GRAVE &kp N1 &kp N2 &kp N3 &kp N4 &kp N5 &kp N6 &kp N7 &kp N8 &kp N9 &kp N0 &kp EQUAL KC_TILD KC_EXLM KC_AT KC_HASH KC_DLR KC_PERC KC_CIRC KC_AMPR KC_ASTR KC_LPRN KC_RPRN KC_PLUS &trans KC_LT KC_GT KC_LCBR KC_RCBR &kp BACKSLASH &trans &trans &trans &trans KC_PIPE &kp MINUS KC_UNDS &kp LEFT_BRACKET &kp RIGHT_BRACKET &trans &trans &trans &trans &kp ENTER &trans &mo _NUMPAD &trans &trans &trans &trans
+          >;
+        };layer2 {
+          bindings = <
+          &trans &kp F1 &kp F2 &kp F3 &kp F4 &kp F5 &kp F6 &kp F7 &kp F8 &kp F9 &kp F10 &kp F11 &trans &trans &trans &kp LG(LEFT_BRACKET) &kp LG(RIGHT_BRACKET) &trans &trans &trans &trans &trans &trans &kp F12 &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans
+          >;
+        };layer3 {
+          bindings = <
+          &trans &kp C_PLAY_PAUSE &kp C_NEXT &trans &trans &trans &kp F20 &kp HOME &kp PAGE_UP &kp PAGE_DOWN &kp END &kp F20 &trans &kp LEFT_SHIFT &kp LEFT_CONTROL &kp LEFT_GUI &kp LEFT_ALT &trans &kp F20 &kp LEFT &kp UP &kp DOWN &kp RIGHT &kp F20 &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &kp ENTER &mo _NUMPAD &trans &trans &trans &trans &trans
+          >;
+        };layer4 {
+          bindings = <
+          UC_WINC UC(0xC9) UC(0xC0) UC(0xC8) UC(0xC7) &trans &kp F20 &kp KP_N7 &kp KP_N8 &kp KP_N9 &kp F20 &kp BACKSPACE UC_LINX UC(0xE9) UC(0xE0) UC(0xE8) UC(0xE7) &trans &kp F20 &kp KP_N4 &kp KP_N5 &kp KP_N6 &kp F20 &kp F20 &trans UC(0xEA) UC(0xF4) UC(0xF9) UC(0xFC) &trans &trans &trans &trans &trans &kp F20 &kp KP_N1 &kp KP_N2 &kp KP_N3 &kp KP_N0 &kp F20 &trans &trans &trans &kp F20 &trans &trans &kp F20 &trans &trans &trans
+          >;
+        };
+    };
+  };
+*/
+
