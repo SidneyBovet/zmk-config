@@ -47,14 +47,15 @@
         // ├───────────┼───────────┼───────────┼───────────┼───────────┼───────────┤                                                       ├───────────┼───────────┼───────────┼───────────┼───────────┼───────────┤
             &lt FUNC ESC &kp A      &kp S       &kp D       &kp F       &kp G                                                               &kp H       &kp J       &kp K       &kp L       &kp SEMI    &kp SINGLE_QUOTE
         // ├───────────┼───────────┼───────────┼───────────┼───────────┼───────────┼───────────┬───────────╮       ╭───────────┬───────────┼───────────┼───────────┼───────────┼───────────┼───────────┼───────────┤
-            &kp LSHIFT  &kp Z       &kp X       &kp C       &kp V       &kp B       &trans       &findcpy           &kp C_MUTE  &trans      &kp N       &kp M       &kp COMMA   &kp DOT     &kp SLASH   &kp DELETE
+            &kp LSHIFT  &kp Z       &kp X       &kp C       &kp V       &kp B       &trans      &kp C_MUTE          &findcpy    &trans      &kp N       &kp M       &kp COMMA   &kp DOT     &kp SLASH   &kp DELETE
         // ╰───────────┴───────────┴───────────┼───────────┼───────────┼───────────┼───────────┼───────────┤       ├───────────┼───────────┼───────────┼───────────┼───────────┼───────────┴───────────┴───────────╯
                                                 &trans      &kp LALT    &kp LCTRL   &kp SPACE   &mo SYM             &mo NAV     &kp RSHIFT  &kp LGUI    &trans      &trans
         //                                     ╰───────────┴───────────┴───────────┴───────────┴───────────╯       ╰───────────┴───────────┴───────────┴───────────┴───────────╯
             >;
 
-            // Left: F3 / Shift F3, Right: Volume up / down
-            sensor-bindings = <&inc_dec_kp F3 LS(F3) &inc_dec_kp C_VOL_UP C_VOL_DN>;
+            // Invert for L only
+            // Left: Volume up / down, Right: F3 / Shift F3
+            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN &inc_dec_kp F3 LS(F3)>;
         };
 
         sym {
